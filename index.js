@@ -172,7 +172,6 @@ function deleteRole(){
         for ( var i = 0; i<res.length; i++){
             rolesArray.push(res[i].title);
         }
-        console.log(rolesArray);
         deleteRole2(rolesArray);
     })
 }
@@ -205,7 +204,6 @@ function deleteEmployee(){
         for ( var i = 0; i<res.length; i++){
             employeeArray.push(res[i].first_name);
         }
-        console.log(employeeArray);
         deleteEmployee2(employeeArray);   })
 }
 
@@ -259,9 +257,8 @@ function updateEmployeeRole2(employeeArray){
             [
                 {role_id:response.newRoleId},
                 {first_name:response.updateName}
-            ],(err, res ) => {
+            ],(err) => {
                 if (err) throw err;
-                console.log(res.affectedRows);
                 askRepeat();
     
             } )
@@ -270,11 +267,46 @@ function updateEmployeeRole2(employeeArray){
 
 
 
-//still need to finish
 
 function updateEmployeeManager(){
-    
+    connection.query('SELECT * FROM employee_tracker.employee',{},(err,res)=>{
+        if (err) throw err;
+        let employeeArray = [];
+        for (var i = 0; i<res.length; i++){
+            employeeArray.push(res[i].first_name);
+        }
+        updateEmployeeManager2(employeeArray)    
+    })
 }
+
+function updateEmployeeManager2(employeeArray){
+    inquirer.prompt([
+        {
+            name: 'updateManager',
+            type: 'list',
+            message: 'Whos manager would you like to update?',
+            choices: employeeArray
+        },
+        {
+            name: 'newManagerId',
+            type: 'input',
+            message: 'What new manager_id would you like to give?',
+        },
+
+    ])
+        .then((response)=>{
+            connection.query('UPDATE employee SET ? WHERE ?',
+            [
+                {manager_id:response.newManagerId},
+                {first_name:response.updateManager}
+            ],(err) => {
+                if (err) throw err;
+                askRepeat();
+    
+            } )
+        })
+}
+
 
 function viewDepartment(){
     connection.query('SELECT * FROM employee_tracker.department', 
@@ -309,10 +341,20 @@ function viewEmployee(){
     })
 }
 //still need to finish
+//still need to finish
+//still need to finish
+//still need to finish
+//still need to finish
+//still need to finish
+//still need to finish
+
 function viewCost(){
     connection.query('SELECT salary FROM ')
     
     
+   
+}
+function viewCost2(){
     inquirer.prompt([
         {
             name: 'cost',
@@ -321,6 +363,7 @@ function viewCost(){
             choices: ['','']
         }])
 }
+
 
 function createDepartment(){
     inquirer.prompt([
