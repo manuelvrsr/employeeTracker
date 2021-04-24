@@ -131,22 +131,102 @@ function delete1(){
     })
 
 }
-//still need to finish
 
 function deleteDepartment(){
+    connection.query('SELECT * FROM employee_tracker.department',{},(err,res)=>{
+        if (err) throw err;
+        let departmentArray = [];
+        for ( var i = 0; i<res.length; i++){
+            departmentArray.push(res[i].name);
+        }
+        console.log(departmentArray);
+        deleteDepartment2(departmentArray);
+    })
 
 }
-//still need to finish
+
+function deleteDepartment2(departmentArray){
+    inquirer.prompt([
+        {
+            name: 'deleteD',
+            type: 'list',
+            message: 'What department would you like to delete?',
+            choices: departmentArray
+        }
+    ])
+        .then((response)=>{
+            connection.query('DELETE FROM department WHERE ?',
+            {
+                name: response.deleteD
+            },(err) => {
+                if (err) throw err;
+                askRepeat();
+            })})
+}
+
 
 function deleteRole(){
+    connection.query('SELECT * FROM employee_tracker.role',{},(err,res)=>{
+        if (err) throw err;
+        let rolesArray = [];
+        for ( var i = 0; i<res.length; i++){
+            rolesArray.push(res[i].title);
+        }
+        console.log(rolesArray);
+        deleteRole2(rolesArray);
+    })
+}
+
+function deleteRole2(rolesArray){
+    inquirer.prompt([
+        {
+            name: 'deleteR',
+            type: 'list',
+            message: 'What role would you like to delete?',
+            choices: rolesArray
+        }
+    ])
+    .then((response)=>{
+        connection.query('DELETE FROM role WHERE ?',
+        {
+            title: response.deleteR
+        },(err) => {
+            if (err) throw err;
+            askRepeat();
+        })})
+
 
 }
-//still need to finish
 
 function deleteEmployee(){
-
+    connection.query('SELECT * FROM employee_tracker.employee',{},(err,res)=>{
+        if (err) throw err;
+        let employeeArray = [];
+        for ( var i = 0; i<res.length; i++){
+            employeeArray.push(res[i].first_name);
+        }
+        console.log(employeeArray);
+        deleteEmployee2(employeeArray);   })
 }
-//still need to finish
+
+function deleteEmployee2(employeeArray){
+    inquirer.prompt([
+        {
+            name: 'deleteE',
+            type: 'list',
+            message: 'What employee would you like to delete?',
+            choices: employeeArray
+        }
+    ])
+    .then((response)=>{
+        connection.query('DELETE FROM employee WHERE ?',
+        {
+            first_name: response.deleteE
+        },(err) => {
+            if (err) throw err;
+            askRepeat();
+        })})
+}
 
 function updateEmployeeRole(){
     connection.query('SELECT * FROM employee_tracker.employee',{},(err,res)=>{
@@ -181,7 +261,8 @@ function updateEmployeeRole2(employeeArray){
                 {first_name:response.updateName}
             ],(err, res ) => {
                 if (err) throw err;
-                console.log(res)
+                console.log(res.affectedRows);
+                askRepeat();
     
             } )
         })
@@ -229,7 +310,7 @@ function viewEmployee(){
 }
 //still need to finish
 function viewCost(){
-    connection.query('SELECT * FROM ')
+    connection.query('SELECT salary FROM ')
     
     
     inquirer.prompt([
@@ -241,7 +322,7 @@ function viewCost(){
         }])
 }
 
-function createDepartment (){
+function createDepartment(){
     inquirer.prompt([
         {
             name: 'createD',
