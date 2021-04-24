@@ -110,6 +110,37 @@ function update(){
 }
 
 function delete1(){
+    inquirer.prompt([
+        {
+            name: 'update',
+            type: 'list',
+            message: 'What would you like to delete?',
+            choices: ['Department','Role','Employee']
+        }])
+    .then((response)=>{
+        switch (response.update){
+            case 'Department':
+                deleteDepartment();
+                break;
+            case 'Role':
+                deleteRole();
+                break;
+            case 'Employee':
+                deleteEmployee();
+                break;
+        }
+    })
+
+}
+function deleteDepartment(){
+
+}
+
+function deleteRole(){
+
+}
+
+function deleteEmployee(){
 
 }
 
@@ -122,15 +153,36 @@ function updateEmployeeManager(){
 }
 
 function viewDepartment(){
-    
+    connection.query('SELECT * FROM employee_tracker.department', 
+    {
+
+    },(err,response) => {
+        if (err) throw err;
+        console.table(response)
+        askRepeat();
+    })
 }
 
 function viewRole(){
+    connection.query('SELECT * FROM employee_tracker.role', 
+    {
 
+    },(err,response) => {
+        if (err) throw err;
+        console.table(response)
+        askRepeat();
+    })
 }
 
 function viewEmployee(){
+    connection.query('SELECT * FROM employee_tracker.employee', 
+    {
 
+    },(err,response) => {
+        if (err) throw err;
+        console.table(response)
+        askRepeat();
+    })
 }
 
 function viewCost(){
