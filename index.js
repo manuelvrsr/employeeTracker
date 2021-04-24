@@ -64,14 +64,76 @@ function create(){
 }
 
 function view(){
-
+    inquirer.prompt([
+        {
+            name: 'view',
+            type: 'list',
+            message: 'What would you like to view?',
+            choices: ['Department','Role', 'Employee','Cost of employees per department']
+        }])
+    .then((response)=>{
+        switch (response.view){
+            case 'Department':
+                viewDepartment();
+                break;
+            case 'Role':
+                viewRole();
+                break;
+            case 'Employee':
+                viewEmployee();
+                break;
+            case 'Cost of employees per department':
+                viewCost();
+                break;
+        }
+    })
 }
 
 function update(){
-
+    inquirer.prompt([
+        {
+            name: 'update',
+            type: 'list',
+            message: 'What would you like to update?',
+            choices: ['Update employee role','Update employee manager']
+        }])
+    .then((response)=>{
+        switch (response.update){
+            case 'Update employee role':
+                updateEmployeeRole();
+                break;
+            case 'Update employee manager':
+                updateEmployeeManager();
+                break;
+        }
+    })
 }
 
 function delete1(){
+
+}
+
+function updateEmployeeRole(){
+    
+}
+
+function updateEmployeeManager(){
+    
+}
+
+function viewDepartment(){
+    
+}
+
+function viewRole(){
+
+}
+
+function viewEmployee(){
+
+}
+
+function viewCost(){
 
 }
 
