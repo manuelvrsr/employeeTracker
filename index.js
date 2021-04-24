@@ -37,7 +37,6 @@ function start(){
                     break;
             }
         })
-
 }
 
 function create(){
@@ -132,21 +131,65 @@ function delete1(){
     })
 
 }
+//still need to finish
+
 function deleteDepartment(){
 
 }
+//still need to finish
 
 function deleteRole(){
 
 }
+//still need to finish
 
 function deleteEmployee(){
 
 }
+//still need to finish
 
 function updateEmployeeRole(){
-    
+    connection.query('SELECT * FROM employee_tracker.employee',{},(err,res)=>{
+        if (err) throw err;
+        let employeeArray = [];
+        for (var i = 0; i<res.length; i++){
+            employeeArray.push(res[i].first_name);
+        }
+        updateEmployeeRole2(employeeArray);
+    })
 }
+
+function updateEmployeeRole2(employeeArray){
+    inquirer.prompt([
+        {
+            name: 'updateName',
+            type: 'list',
+            message: 'Whos role would you like to update?',
+            choices: employeeArray
+        },
+        {
+            name: 'newRoleId',
+            type: 'input',
+            message: 'What new role_id would you like to give?',
+        },
+
+    ])
+        .then((response)=>{
+            connection.query('UPDATE employee SET ? WHERE ?',
+            [
+                {role_id:response.newRoleId},
+                {first_name:response.updateName}
+            ],(err, res ) => {
+                if (err) throw err;
+                console.log(res)
+    
+            } )
+        })
+}
+
+
+
+//still need to finish
 
 function updateEmployeeManager(){
     
@@ -184,9 +227,18 @@ function viewEmployee(){
         askRepeat();
     })
 }
-
+//still need to finish
 function viewCost(){
-
+    connection.query('SELECT * FROM ')
+    
+    
+    inquirer.prompt([
+        {
+            name: 'cost',
+            type: 'list',
+            message: 'view the combined salaries of all employees in a department',
+            choices: ['','']
+        }])
 }
 
 function createDepartment (){
