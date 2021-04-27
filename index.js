@@ -9,14 +9,29 @@ const connection = mysql.createConnection({
     password: 'password',
     database: 'employee_tracker',
 });
+console.log('____________________________________')
+console.log('  _____           _                 ')
+console.log(' |   __|_____ ___| |___ _ _ ___ ___ ')
+console.log(' |   __|     | . | | . | | | -_| -_|')
+console.log(' |_____|_|_|_|  _|_|___|_  |___|___|')
+console.log('             |_|       |___|        ')
+console.log('  _____             _               ')
+console.log(' |_   _|___ ___ ___| |_ ___ ___     ')
+console.log(`   | | |  _| .'|  _| '_| -_|  _|    `)
+console.log('   |_| |_| |__,|___|_,_|___|_|      ')
+console.log('____________________________________')
 
 function start(){
+   
+  
+
+
     inquirer.prompt([
         {
             name: 'start',
             type: 'list',
             message: 'What would you like to do?',
-            choices: ['Create','View', 'Update','Delete','Quit']
+            choices: ['Create','View','Update','Delete','Quit']
         }])
         .then((response)=>{
             switch (response.start){
@@ -111,13 +126,13 @@ function update(){
 function delete1(){
     inquirer.prompt([
         {
-            name: 'update',
+            name: 'delete',
             type: 'list',
             message: 'What would you like to delete?',
             choices: ['Department','Role','Employee']
         }])
     .then((response)=>{
-        switch (response.update){
+        switch (response.delete){
             case 'Department':
                 deleteDepartment();
                 break;
@@ -265,9 +280,6 @@ function updateEmployeeRole2(employeeArray){
         })
 }
 
-
-
-
 function updateEmployeeManager(){
     connection.query('SELECT * FROM employee_tracker.employee',{},(err,res)=>{
         if (err) throw err;
@@ -340,30 +352,61 @@ function viewEmployee(){
         askRepeat();
     })
 }
-//still need to finish
-//still need to finish
-//still need to finish
-//still need to finish
-//still need to finish
-//still need to finish
-//still need to finish
 
-function viewCost(){
-    connection.query('SELECT salary FROM ')
+
+function viewCost(){            //still need to finish
+
+    connection.query('SELECT * FROM employee_tracker.department',{},(err,res)=>{
+        if (err) throw err;
+        let departmentArray = [];
+        for (var i = 0; i<res.length; i++){
+            departmentArray.push(res[i].name);
+        }
+        viewCost2(departmentArray);
+
+    })
     
     
    
 }
-function viewCost2(){
+function viewCost2(departmentArray){
     inquirer.prompt([
         {
             name: 'cost',
             type: 'list',
             message: 'view the combined salaries of all employees in a department',
-            choices: ['','']
+            choices: departmentArray
         }])
-}
+        .then((response) =>{
+            connection.query('SELECT id FROM employee_tracker.department WHERE ?',
+            {
+                name: response.cost
+            },(err,res)=>{
+                if (err) throw err;
+                console.log(res);
+                var answer = res.id;
+                console.log(answer);
+                connection.query('SELECT * FROM employee_tracker.role WHERE ?',
+                {
+                    department_id: res.id
+                },(err,res)=>{
+                    if (err) throw err;
+                    console.log(res);
+                })
+            })
+        })
 
+}
+function viewCost3(answer){
+    connection.query(`SELECT * FROM employee_tracker.role WHERE ?`,
+    {
+        department_id: answer
+    },(err,response)=>{
+        if (err) throw err;
+       console.log(response);
+    })
+
+}
 
 function createDepartment(){
     inquirer.prompt([
@@ -435,7 +478,7 @@ function createEmployee(){
         {
             name: 'managerIdE',
             type: 'input',
-            message: 'What is the ID of the manager for this employee? (leave blank if this employee hasno manager) '
+            message: 'What is the ID of the manager for this employee? (leave blank if this employee has no manager) '
         },
     ])
     .then((response)=>{
